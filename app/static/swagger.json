@@ -1,0 +1,330 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Event Trigger Platform API",
+    "version": "1.0.0",
+    "description": "API for managing event triggers and viewing event logs."
+  },
+  "paths": {
+    "/api/triggers": {
+      "post": {
+        "summary": "Create a new API trigger",
+        "description": "Create a new API trigger that fires when an API request is made.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/APITrigger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "API trigger created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "API trigger created successfully"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/scheduled/triggers": {
+      "post": {
+        "summary": "Create a new scheduled trigger",
+        "description": "Create a new scheduled trigger that fires at a fixed time or interval.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduledTrigger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Scheduled trigger created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Scheduled trigger created successfully"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/triggers": {
+      "get": {
+        "summary": "List all triggers",
+        "description": "Returns a list of all triggers (API and scheduled).",
+        "responses": {
+          "200": {
+            "description": "A list of triggers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Trigger"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/triggers/{trigger_id}/test": {
+      "post": {
+        "summary": "Manually trigger a trigger",
+        "description": "Manually trigger a specific trigger for testing purposes.",
+        "parameters": [
+          {
+            "name": "trigger_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Trigger fired manually for testing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Trigger fired manually for testing"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Trigger not found"
+          }
+        }
+      }
+    },
+    "/event_logs": {
+      "get": {
+        "summary": "List all event logs",
+        "description": "Returns a list of all event logs. Can be filtered by state (active or archived).",
+        "parameters": [
+          {
+            "name": "state",
+            "in": "query",
+            "description": "Filter by state (active or archived)",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of event logs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventLog"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/triggers/{trigger_id}": {
+      "put": {
+        "summary": "Edit a trigger",
+        "description": "Update an existing trigger.",
+        "parameters": [
+          {
+            "name": "trigger_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Trigger"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trigger updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Trigger updated successfully"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Trigger not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APITrigger": {
+        "type": "object",
+        "properties": {
+          "api_endpoint": {
+            "type": "string",
+            "example": "/api/trigger"
+          },
+          "payload": {
+            "type": "object",
+            "example": {"key": "value"}
+          },
+          "is_test": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ScheduledTrigger": {
+        "type": "object",
+        "properties": {
+          "schedule_type": {
+            "type": "string",
+            "enum": ["fixed_time", "fixed_interval"]
+          },
+          "schedule_value": {
+            "type": "string",
+            "example": "15:00(Use type as fixed time) or 10(use type as fixed interval)"
+          },
+          "is_recurring": {
+            "type": "boolean"
+          },
+          "payload": {
+            "type": "object",
+            "example": {"key": "value"}
+          },
+          "is_test": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Trigger": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["scheduled", "api"]
+          },
+          "schedule_type": {
+            "type": "string",
+            "enum": ["fixed_time", "fixed_interval"]
+          },
+          "schedule_value": {
+            "type": "string",
+            "example": "15:00(Use type as fixed time) or 10(use type as fixed interval)"
+          },
+          "is_recurring": {
+            "type": "boolean"
+          },
+          "api_endpoint": {
+            "type": "string",
+            "example": "/api/trigger"
+          },
+          "payload": {
+            "type": "object",
+            "example": {"key": "value"}
+          },
+          "is_test": {
+            "type": "boolean"
+          }
+        }
+      },
+      "EventLog": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "trigger_id": {
+            "type": "integer"
+          },
+          "triggered_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "payload": {
+            "type": "object",
+            "example": {"key": "value"}
+          },
+          "is_test": {
+            "type": "boolean"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["active", "archived"]
+          }
+        }
+      }
+    }
+  }
+}
