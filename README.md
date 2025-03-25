@@ -13,11 +13,6 @@ The Event Trigger Platform is a Flask-based application designed to manage and t
 - **Dockerization**: Easily deploy the application using Docker.
 - **Swagger UI**: Interactive API documentation for easy testing and exploration.
 
-## Features I couldn't implement due to time constraints
-  Deployment on Cloud.
-  
-  Implement an active/archived state system .
-
 ## Project Structure
 
 - **app/**: Contains the main application code.
@@ -221,10 +216,6 @@ You can test the application using the Swagger UI or by making direct API calls 
 
 The Event Trigger Platform is a robust solution for managing and triggering events based on schedules or API calls. It provides a comprehensive set of features, including event logging, cleanup, and Docker support, making it easy to deploy and manage. The Swagger UI offers an interactive way to explore and test the API endpoints, ensuring a smooth development and testing experience.
 
-## References
-  https://youtu.be/_COyD1CExKU?si=UR9PqEYqnPHNs8M0
-  https://youtu.be/ng8L5n6r4kw?si=0cri5MgeFieluA_1
-  https://www.deepseek.com/
 
 ## Proof of Work
 
